@@ -142,7 +142,9 @@
     <ClCompile Include="oop3.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="container.h" />
+    <ClInclude Include="container.h">
+      <DeploymentContent>true</DeploymentContent>
+    </ClInclude>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

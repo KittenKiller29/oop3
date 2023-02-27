@@ -1,6 +1,6 @@
 #pragma once
 #include<iostream>
-template<class T> class Storage {
+template<class T> class Storage {//Ўаблон класса контейнера, внутренн€€ организаци€-список, внешн€€-массив
 public:
 	Storage() {
 
@@ -14,39 +14,37 @@ public:
 	~Storage() {
 
 	}
-	void frontPush(T value);
-	void backPush(T value);
-	void midPush(T value);
-	int elemDelete(T value);
-	void infoTake(T value);
+	
+	void pushObject(int ind, T value);//добавление элемента
+	T deleteObject(int ind);//извлечение с удалением
+	T getObject(int ind);//извлечение без удалени€
+	int getSize();//получение размера контейнера
 private:
-	struct Node {
+	struct Node {//структура €чейки списка
 		Node* next = NULL;
 		T object;
 	};
-	int size;
-	Node* duck;
+	int maxsize;
+	int currentsize;
+	Node* duck;//указатель на первую €чейку в списке
 };
 template<class T>
-void Storage<T>::backPush(T value) {
+void Storage<T>::pushObject(int ind,T value) {
 
 }
 template<class T>
-void Storage<T>::frontPush(T value) {
+T Storage<T>::deleteObject(int ind) {
 
 }
 template<class T>
-void Storage<T>::midPush(T value) {
+T Storage<T>::getObject(int ind) {
 
 }
 template<class T>
-int Storage<T>::elemDelete(T value) {
+int Storage<T>::getSize() {
 
 }
-template<class T>
-void Storage<T>::infoTake(T value) {
 
-}
 
 
 

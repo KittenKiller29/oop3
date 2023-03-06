@@ -11,6 +11,6 @@ public:
 int main() {
 	Storage<test> a(10);
 	stest t;
-	a.pushObject(0,t);
-	std::cout << a.getObject(0)->t;
+	a.setObject(0,t);
+	a.deleteObject(2);
 }

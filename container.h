@@ -20,12 +20,13 @@ public:
 		delete[] mas;
 	}
 	
-	void pushObject(int ind, T value);//добавление элемента
+	void pushObject(int ind, T value);//добавление элемента в контейнер под определенным индексом
+	void setObject(int ind, T value);//присвоение элементу массива пользовательского значения
 	T* deleteObject(int ind);//извлечение с удалением
 	T* getObject(int ind);//извлечение без удаления
 	int getSize();//получение размера контейнера
 private:
-	T* mas;
+	T* mas;//указатель на массив
 	int size;
 	void rewriteArr(int a);//метод изменения размерности массива и его перезаписи
 };
@@ -35,6 +36,8 @@ void Storage<T>::pushObject(int ind,T value) {
 }
 template<class T>
 T* Storage<T>::deleteObject(int ind) {
+	if (size == 0)
+		return nullptr;
 	if (getObject(ind) != nullptr) {
 
 
@@ -45,17 +48,32 @@ T* Storage<T>::deleteObject(int ind) {
 }
 template<class T>
 T* Storage<T>::getObject(int ind) {
-	if (ind >= size || ind < 0)
+	if (size == 0)
 		return nullptr;
+	else if (ind >= size)
+		return &mas[size - 1];
+	else if (ind <= 0)
+		return &mas[0];
 	return &mas[ind];
 }
 template<class T>
 int Storage<T>::getSize() {
-
+	return size;
 }
 template<class T>
 void Storage<T>::rewriteArr(int a) {
 
+}
+template<class T>
+void Storage<T>::setObject(int ind, T value) {
+	if (size == 0)
+		return;
+	else if (ind <= 0)
+		mas[0] = value;
+	else if (ind >= size)
+		mas[size - 1] = value;
+	else
+		mas[ind] = value;
 }
 
 

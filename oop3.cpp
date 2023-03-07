@@ -1,30 +1,58 @@
 ﻿#include<iostream>
 #include"container.h"
-class test {
+#include<time.h>
+class Test {//Родительский класс
 public:
-	int t = 5;
+	Test() {
+		value = 0;
+	}
+	void setValue(int value) {//сеттер для value
+		this->value = value;
+	}
+	int getValue() {//геттер для value
+		return value;
+	}
+protected:
+	int value;
 };
-class stest : public test {
+class Daughtertest : public Test {//Дочерний класс для тестирования контейнера
 public:
-	int te = -5;
-
+	Daughtertest() : Test() { value = 5;}
 };
-int main() {
-	Storage<test> a;
-	stest t,e,k;
-	t.t = 1;
-	/*e.t = 1;
-	k.t = 2;
-	a.setObject(0, t);
-	a.pushObject(0,e);
-	a.pushObject(-1, k);
-	std::cout << a.getObject(0)->t;
-	std::cout << a.getObject(1)->t;
-	std::cout << a.getObject(5)->t;*/
-	a.setObject(0, t);
-	std::cout << a.deleteObject(0)->t;
-	std::cout << a.getSize();
-	a.pushObject(0, t);
-	std::cout << a.getObject(0)->t;
-
+int main() {//основной код программы
+	srand(time(0));
+	Storage<Test> a;
+	int count = 0;
+	int itternum = 100;
+	while (count < 3) {//цикл для тестирования контейнера
+		long double time_spent = 0;
+		clock_t begin = clock();
+		for (int i = 0; i < itternum; i++) {//100;1000;10000 иттераций
+			switch (rand()%3) {//выбор случайного действия
+			case 0://удаление объекта
+				a.deleteObject(rand()%a.getSize());
+				break;
+			case 1://вставка объекта
+				a.pushObject(rand() % a.getSize(),new Daughtertest());
+				break;
+			case 2://вызов случайного метода объекта
+				switch (rand() % 2) {
+				case 0://вызов метода геттера
+					a.getObject(rand() % a.getSize())->getValue();
+					break;
+				case 1://вызов метода сеттера
+					a.getObject(rand() % a.getSize())->setValue(rand()%100);
+					break;
+				}
+				break;
+			}
+		}
+		clock_t end = clock();
+		time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
+		printf("itterations: %i; time: %lf seconds\n", itternum, time_spent);
+		count++;
+		itternum *= 10;
+	}
+	
+	return 0;
 }

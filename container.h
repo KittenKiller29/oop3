@@ -2,15 +2,15 @@
 #include<iostream>
 template<class T> class Storage {//Шаблон класса контейнера, внутренняя организация-массив, внешняя-массив
 public:
-	Storage() {
+	Storage() {//конструктор по умолчанию
 		size = 1;
 		mas = new T[size];
 	}
-	Storage(int a) {
+	Storage(int a) {//конструктор с параметрами
 		size = a;
 		mas = new T[size];
 	}
-	Storage(const Storage& copy) {
+	Storage(const Storage& copy) {//конструктор копирования
 		size = copy.size;
 		mas = new T[size];
 		for (int i = 0; i < size; ++i)
@@ -28,31 +28,53 @@ public:
 private:
 	T* mas;//указатель на массив
 	int size;
-	void rewriteArr(int a);//метод изменения размерности массива и его перезаписи
 };
 template<class T>
 void Storage<T>::pushObject(int ind,T value) {
-	mas[ind] = value;
-}
+	int tmpind = ind;						  
+	if (tmpind < 0)//приведение некорректного индекса к нормальному значению				  
+		tmpind = 0;							  
+	else if (tmpind > size)//приведение некорректного индекса к нормальному значению			  
+		tmpind = size;						  
+	T* newmas = new T[size + 1];			  
+	for (int i = 0; i < tmpind; i++)//запись в новый массив элементов до переданного индекса	  
+		newmas[i] = mas[i];	  
+	newmas[tmpind] = value;//запись в новый массив нового объекта под переданным индексом		  
+	for (int i = tmpind; i < size; i++)	//запись в новый массив всех элементов старого после переданного индекса	  
+		newmas[i + 1] = mas[i];				  
+	delete[] mas;//освбождение памяти от старого массива				  
+	mas = newmas;							  
+	size++;									  
+}											  
 template<class T>
 T* Storage<T>::deleteObject(int ind) {
+	int tmpind = ind;
 	if (size == 0)
 		return nullptr;
-	if (getObject(ind) != nullptr) {
-
-
-
-
+	else if (tmpind >= size)//приведение некорректного индекса к нормальному значению
+		tmpind = size - 1;
+	else if (tmpind < 0)//приведение некорректного индекса к нормальному значению
+		tmpind = 0;
+	T* newmas = new T[size - 1];
+	T elem = mas[tmpind];//сохранение удаляемого объекта во временную переменную для его возврата из метода 
+	for (int i = 0; i < size; i++) {
+		if (i < tmpind)//запись в новый массив всех элементов до переданного индекса
+			newmas[i] = mas[i];
+		else if (i > tmpind)//запись в новый массив всех элементов после переданного индекса
+			newmas[i - 1] = mas[i];
 	}
-	return nullptr;
+	delete[] mas;//освобождение памяти от старого массива
+	mas = newmas;//запись нового массива в mas
+	size--;
+	return &elem;//возврат удаляемого объекта
 }
 template<class T>
 T* Storage<T>::getObject(int ind) {
 	if (size == 0)
 		return nullptr;
-	else if (ind >= size)
+	else if (ind >= size)//приведение некорректного индекса к нормальному значению
 		return &mas[size - 1];
-	else if (ind <= 0)
+	else if (ind <= 0)//приведение некорректного индекса к нормальному значению
 		return &mas[0];
 	return &mas[ind];
 }
@@ -61,16 +83,12 @@ int Storage<T>::getSize() {
 	return size;
 }
 template<class T>
-void Storage<T>::rewriteArr(int a) {
-
-}
-template<class T>
 void Storage<T>::setObject(int ind, T value) {
 	if (size == 0)
 		return;
-	else if (ind <= 0)
+	else if (ind <= 0)//приведение некорректного индекса к нормальному значению
 		mas[0] = value;
-	else if (ind >= size)
+	else if (ind >= size)//приведение некорректного индекса к нормальному значению
 		mas[size - 1] = value;
 	else
 		mas[ind] = value;
